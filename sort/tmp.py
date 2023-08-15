@@ -3,13 +3,12 @@ from utils import test
 def sort(inp):
     size = len(inp)
     for i in range(size-1):
-        min_val = inp[i]
-        min_idx = i
-        for j in range(i+1, size):
-            if min_val > inp[j]:
-                min_val = inp[j]
-                min_idx = j
-        inp[i], inp[min_idx] = inp[min_idx], inp[i]
+        key = inp[i+1]
+        j = i
+        while j>=0 and key < inp[j]:
+            inp[j+1] = inp[j]
+            j-=1
+        inp[j+1] = key
     return inp
 
 
