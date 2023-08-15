@@ -1,21 +1,15 @@
-def sort(inp):
-    num_inp = len(inp)
+from utils import test
 
-    for epoch in range(num_inp-1):
-        for i in range(num_inp-epoch-1):
+def sort(inp):
+    size = len(inp)
+    for epoch in range(size-1):
+        for i in range(size-epoch-1):
             if inp[i] > inp[i+1]:
                 tmp = inp[i]
                 inp[i] = inp[i+1]
                 inp[i + 1] = tmp
 
     return inp
-
-
-def test(out, gt):
-    for o, g in zip(out, gt):
-        if o != g:
-            print('test failure !')
-    print('test pass !')
 
 
 if __name__ == '__main__':

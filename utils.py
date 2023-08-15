@@ -3,5 +3,4 @@ def test(out, exp):
         if o != e:
             print('test fail!')
             return
-
     print('test success.')
