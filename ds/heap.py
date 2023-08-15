@@ -7,18 +7,16 @@ class MaxHeap:
 
     def push(self, val):
         '''
-        add val into last.
-        compare with parent, if bigger than parent, swap.
+        將值加入陣列最後一個
+        從最後一個位置，與父節點比較大小，如果比較大就交換
         '''
         self.heap.append(val)
         self._swim(len(self.heap) - 1)
 
     def pop(self):
         '''
-        extact val, copy last node to root.
-        compare with left, right child,
-        if right bigger than left, swap with right child
-        else wap with left child
+        取出值，使用最後一個值作為根結點，並刪除最後一個值
+        更新結構，先比較左右節點誰大，再與大的節點交換
         '''
         value = self.heap[0]
         self.heap[0] = self.heap[-1]

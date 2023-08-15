@@ -43,16 +43,31 @@ class BinarySearchTree:
             self._delete(val, self.root)
 
     def _delete(self, val, curr):
+        '''
+        1. 根據刪除值進行，左邊查詢或右邊查詢
+        2. 找到刪除值節點後:
+            2.1 如果刪除的節點，存在左右節點:
+            找刪除節點的右子樹最小值，將最小值替換，並刪除原本右子樹的最小值(再次用遞迴刪除)，並還傳此節點
+            2.2 如果刪除節點，僅存再右節點:
+            回傳右節點
+            2.2 如果刪除節點，僅存再左節點:
+            回傳左節點
+        '''
+        # 未找到刪除節點，回傳 None
         if curr is None:
             return None
 
+        # 刪除值小於目前值，遞迴搜尋左邊
         if val < curr.val:
             curr.left = self._delete(val, curr.left)
-
+        # 刪除值大於目前值，遞迴搜尋右邊
         if val > curr.val:
             curr.right = self._delete(val, curr.right)
-
+        # 找到刪除節點
         if val == curr.val:
+            # 如果刪除節點的左右節點都存在
+            # 尋找刪除節點的右子樹最小值
+            # 替換目前的值，並刪除原本右子樹的值
             if curr.left and curr.right:
                 min_node = self._get_min(curr.right)
                 curr.val = min_node.val
@@ -75,15 +90,18 @@ class BinarySearchTree:
             return self._search(val, self.root)
 
     def _search(self, val, curr):
+        # 未找到回傳 False
         if curr is None:
             return False
 
+        # 找到回傳 True
         if val == curr.val:
             return True
 
+        # 搜尋值小於目前值, 遞迴搜尋左邊
         if val < curr.val:
             return self._search(val, curr.left)
-
+        # 搜尋值小於目前值, 遞迴搜尋右邊
         if val > curr.val:
             return self._search(val, curr.right)
 

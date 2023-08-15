@@ -2,11 +2,14 @@ from utils import test
 
 def sort(inp):
     size = len(inp)
+    # 執行 n - 1 個 epochs
     for i in range(size-1):
+        # 尋找 i ~ n 最小值
         min_idx = i
         for j in range(i, size):
             if inp[min_idx] > inp[j]:
                 min_idx = j
+        # 將 inp[i] 與 最小值 替換
         inp[i], inp[min_idx] = inp[min_idx], inp[i]
 
     return inp

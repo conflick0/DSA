@@ -2,7 +2,9 @@ from utils import test
 
 def sort(inp):
     size = len(inp)
+    # 執行 n - 1 個 epochs
     for epoch in range(size-1):
+        # 執行 n - epoch - 1 個 epochs, 左邊大於右邊就交換
         for i in range(size-epoch-1):
             if inp[i] > inp[i+1]:
                 tmp = inp[i]
