@@ -2,13 +2,17 @@ from utils import test
 
 def sort(inp):
     size = len(inp)
-    for i in range(size-1):
-        tmp = inp[i+1]
-        j=i
-        while j >= 0 and tmp < inp[j]:
-            inp[j+1] = inp[j]
-            j -= 1
-        inp[j+1] = tmp
+    gap = size // 2
+    while gap > 0:
+        for i in range(gap, size):
+            tmp = inp[i]
+            j = i
+            while j >= gap and tmp < inp[j-gap]:
+                inp[j] = inp[j-gap]
+                j -= gap
+            inp[j] = tmp
+
+        gap = gap // 2
     return inp
 
 
