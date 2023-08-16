@@ -1,61 +1,124 @@
-class Heap:
+from utils import test
+
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+
+class BST:
     def __init__(self):
-        self.heap = []
+        self.root = None
 
-    def push(self, val):
-        self.heap.append(val)
-        self._swin(len(self.heap)-1)
+    def insert(self, val):
+        if self.root is None:
+            self.root = Node(val)
+        else:
+            self._insert(val, self.root)
 
-    def pop(self):
-        val = self.heap[0]
-        self.heap[0] = self.heap[-1]
-        self.heap.pop()
-        self._sink(0)
-        return val
+    def _insert(self, val, curr):
+        if curr is None:
+            return Node(val)
 
-    def _swin(self, idx):
-        while idx > 0 and self._get_parent_idx(idx) < len(self.heap):
-            p_idx = self._get_parent_idx(idx)
-            if self.heap[idx] > self.heap[p_idx]:
-                self.heap[idx], self.heap[p_idx] = self.heap[p_idx], self.heap[idx]
-            idx = p_idx
+        if val == curr.val:
+            print('val {val} is exist')
 
-    def _sink(self, idx):
-        while self._get_left_idx(idx) < len(self.heap):
-            l_idx = self._get_left_idx(idx)
-            r_idx = self._get_right_idx(idx)
-            if r_idx < len(self.heap) and self.heap[r_idx] > self.heap[l_idx]:
-                l_idx = r_idx
-            if self.heap[l_idx] > self.heap[idx]:
-                self.heap[idx], self.heap[l_idx] = self.heap[l_idx], self.heap[idx]
+        if val < curr.val:
+            curr.left = self._insert(val, curr.left)
+            return curr
 
-            idx = l_idx
+        if val > curr.val:
+            curr.right = self._insert(val, curr.right)
+            return curr
 
-    def _get_left_idx(self, i):
-        return i * 2 + 1
+    def delete(self, val):
+        if self.root is not None:
+            self._delete(val, self.root)
 
-    def _get_right_idx(self, i):
-        return i * 2 + 2
+    def _delete(self, val, curr):
+        if curr is None:
+            return None
 
-    def _get_parent_idx(self, i):
-        return (i - 1) // 2
+        if val < curr.val:
+            curr.left = self._delete(val, curr.left)
+        if val > curr.val:
+            curr.right = self._delete(val, curr.right)
 
-    def __str__(self):
-        return str(self.heap)
+        if val == curr.val:
+            if curr.left and curr.right:
+                min_node = self._get_min(curr.right)
+                curr.val = min_node.val
+                curr.right = self._delete(val, curr.right)
+                return curr
+            if curr.left:
+                return curr.left
+            if curr.right:
+                return curr.right
+
+    def _get_min(self, curr):
+        while curr and curr.left:
+            curr = curr.left
+        return curr
+
+    def search(self,val):
+        if self.root:
+            return self._search(val, self.root)
+
+    def _search(self, val, curr):
+        if curr is None:
+            return False
+
+        if val == curr.val:
+            return True
+
+        if val < curr.val:
+            return self._search(val, curr.left)
+
+        if val > curr.val:
+            return self._search(val, curr.right)
+
+
+    def traversal(self, mode='pre_ord_traversal'):
+        f = getattr(self, mode, None)
+        if f is not None:
+            return f(self.root)
+        return None
+
+    def pre_order_traversal(self, curr):
+        res = []
+        if curr:
+            res.append(curr.val)
+            res = res + self.pre_order_traversal(curr.left)
+            res = res + self.pre_order_traversal(curr.right)
+        return res
 
 
 if __name__ == '__main__':
-    heap = Heap()
-    heap.push(20)
-    heap.push(10)
-    heap.push(5)
-    heap.push(80)
-    heap.push(75)
-    heap.push(78)
-    heap.push(72)
-    heap.push(73)
-    print(heap)  # 80, 75, 78, 73, 20, 5, 72, 10
-    heap.pop()
-    print(heap)  # 78, 75, 72, 73, 20, 5, 10
-    heap.pop()
-    print(heap)
+    inp = [11, 7, 15, 5, 3, 9]
+    exp_pre_ord = [11, 7, 5, 3, 9, 15]
+    exp_in_ord = [3, 5, 7, 9, 11, 15]
+    exp_post_ord = [3, 5, 9, 7, 15, 11]
+    exp_del_pre_ord = [11, 9, 5, 3, 15]
+
+    bst = BST()
+
+    for i in inp:
+        bst.insert(i)
+
+    out_pre_ord = bst.traversal('pre_order_traversal')
+    print('out_pre_ord:', out_pre_ord)
+    print('exp_pre_ord:', exp_pre_ord)
+    test(out_pre_ord, exp_pre_ord)
+
+    search_val = 7
+    exp_search_res = [search_val in inp]
+    out_search_res = [bst.search(search_val)]
+    print('out_post_ord:', exp_search_res)
+    print('exp_post_ord:', out_search_res)
+    test(out_search_res, exp_search_res)
+
+    bst.delete(7)
+    del_out_pre_ord = bst.traversal('pre_order_traversal')
+    print('del_out_pre_ord:', del_out_pre_ord)
+    print('exp_del_pre_ord:', exp_del_pre_ord)
+    test(del_out_pre_ord, exp_del_pre_ord)
