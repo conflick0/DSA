@@ -2,18 +2,21 @@ from utils import test
 
 
 def search(inp, target):
-    inp = sorted(inp)
+    sorted(inp)
     lo = 0
-    hi = len(inp) - 1
+    hi = len(inp)
 
-    while lo <= hi:
-        mid = int((lo + hi)/2)
-        if target == inp[mid]:
+    while lo < hi:
+        mid = int((lo+hi)/2)
+        if mid > len(inp)-1:
+            break
+
+        if inp[mid] == target:
             return True
-        elif target > inp[mid]:
-            lo += 1
-        else:
+        elif inp[mid] > target:
             hi -= 1
+        else:
+            lo += 1
     return False
 
 if __name__ == '__main__':

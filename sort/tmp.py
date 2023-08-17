@@ -1,30 +1,26 @@
 from utils import test
 
-def max_heapify(inp, n, i):
-    largest = i
-    l = 2*i + 1
-    r = 2*i + 2
+def _part(inp, lo, hi):
+    pivot = inp[hi]
+    next_idx = lo
+    for i in range(lo, len(inp)-1):
+        if inp[i] < pivot:
+            inp[i], inp[next_idx] = inp[next_idx], inp[i]
+            next_idx += 1
+    inp[hi], inp[next_idx] = inp[next_idx], inp[hi]
+    return next_idx
 
-    if l < n and inp[l] > inp[largest]:
-        largest = l
+def _sort(inp, lo, hi):
+    if lo <= hi:
+        p_idx = _part(inp, lo, hi)
+        _sort(inp, lo, p_idx-1)
+        _sort(inp, p_idx+1, hi)
+    return inp
 
-    if r < n and inp[r] > inp[largest]:
-        largest = r
-
-    if largest != i:
-        inp[i], inp[largest] = inp[largest], inp[i]
-        max_heapify(inp, n, largest)
 
 def sort(inp):
-    n = len(inp)
+    return _sort(inp, 0, len(inp)-1)
 
-    for i in range(n//2-1, -1, -1):
-        max_heapify(inp, n, i)
-
-    for i in range(n-1, 0, -1):
-        inp[i], inp[0] = inp[0], inp[i]
-        max_heapify(inp, i, 0)
-    return inp
 
 
 if __name__ == '__main__':
